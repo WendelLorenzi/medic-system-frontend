@@ -89,7 +89,8 @@ class RegisterForms extends React.Component {
       borderRadius: '5px',
       cursor: 'pointer',
       marginTop: '80px',
-      marginLeft: '380px'
+      marginLeft: '380px',
+      fontFamily: 'Averia Libre'
     };
 
     return (

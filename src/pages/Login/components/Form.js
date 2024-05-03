@@ -72,7 +72,8 @@ class LoginForms extends React.Component {
       borderRadius: '5px',
       cursor: 'pointer',
       marginTop: '80px',
-      marginLeft: '40%'
+      marginLeft: '40%',
+      fontFamily: 'Averia Libre'
     };
 
     const buttonStylePassnot = {
@@ -84,7 +85,8 @@ class LoginForms extends React.Component {
         fontWeight: 700,
         cursor: 'pointer',
         marginTop: '100px',
-        marginLeft: '40%'
+        marginLeft: '40%',
+        fontFamily: 'Averia Libre'
       };
 
     return (
