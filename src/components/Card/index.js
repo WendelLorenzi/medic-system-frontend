@@ -3,7 +3,7 @@ import React from 'react';
 class Card extends React.Component {
   render() {
 
-    const { vaccineName, qtdDose, date, img, nextDose } = this.props;
+    const { vaccineName, qtdDose, date, img, nextDose, onClick } = this.props;
 
     const cardStyle = {
       width: '330px',
@@ -11,7 +11,7 @@ class Card extends React.Component {
       position: 'fixed',
       top: '215px',
       left: '159px',
-      opacity: '0px'
+      cursor: 'pointer'
     };
 
     const titleStyle = {
@@ -73,7 +73,7 @@ class Card extends React.Component {
       };
 
     return (
-      <div style={cardStyle}>
+      <div style={cardStyle} onClick={onClick}>
         <div style={titleStyle}>{vaccineName}</div>
         <div style={tagStyle}>{qtdDose}</div>
         <div style={dateStyle}>{date}</div>

@@ -1,6 +1,7 @@
 import React from 'react';
+import Modal from '../../../components/Modal';
 
-class RegisterVaccineForms extends React.Component {
+class EditVaccineForms extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -23,9 +24,8 @@ class RegisterVaccineForms extends React.Component {
     console.log('Valores do formulário:', this.state);
   };
 
-  handlePasswordMatch = () => {
-    const { senha, confirmarSenha } = this.state;
-    return senha === confirmarSenha;
+  handleModal = () => {
+    this.setState({ openModal: true });
   };
 
   handleFileSelect = (e) => {
@@ -118,12 +118,38 @@ class RegisterVaccineForms extends React.Component {
         textAlign: 'center'
       };
 
+      const topRightButtonStyle = {
+        position: 'absolute',
+        width: '130px',
+        height: '40px',
+        right: '20px',
+        backgroundColor: '#FD7979',
+        color: 'white',
+        fontSize: '18px',
+        fontWeight: 'bold',
+        border: '1px',
+        //borderRadius: '5px',
+        padding: '10px 20px',
+        cursor: 'pointer',
+        fontFamily: 'Averia Libre'
+      };
+
+      const { openModal } = this.state;
+      
     return (
+      <>
+      <button style={topRightButtonStyle} onClick={this.handleModal}>
+      <img src="../../../public/assets/trashIcon.png" alt={""} />
+        Excuir
+      </button>
       <div style={formularioStyle}>
         <form onSubmit={this.handleSubmit} style={{
           display: 'flex',
           flexDirection: 'column'
         }}>
+            {openModal && (
+                 <Modal isOpen={true}/>
+            )}
         <div style={{
           marginLeft: '4.5%',
           marginBottom: '20px',
@@ -203,12 +229,13 @@ class RegisterVaccineForms extends React.Component {
             <input type="date" id="proxima" name="proxima" style={inputStyle} value={this.state.proxima} onChange={this.handleChange} />
           </div>
           <div>
-            <button style={buttonStyle} onClick={this.handleSubmit}>Cadastrar</button>
+            <button style={buttonStyle} onClick={this.handleSubmit}>Salvar Alterações</button>
           </div>
         </form>
       </div>
+      </>
     );
   }
 }
 
-export default RegisterVaccineForms;
+export default EditVaccineForms;

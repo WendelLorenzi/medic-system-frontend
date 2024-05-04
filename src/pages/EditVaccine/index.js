@@ -1,22 +1,22 @@
 import React from 'react';
 import Header from '../../components/Header';
-import RegisterForms from './components/Forms';
+import EditVaccineForms from './components/Form';
 
-function Register() {
+function EditVaccine() {
   return (
     <div className="Register" style={{
       background: "#ADD4D0"
     }}>
-      <Header showButton={false} loggued={false}/>
+      <Header showButton={true} loggued={true}/>
       <div style={{
         overflowY: 'auto',
         height: '120vh',
         padding: "20px"
       }}>
-        <RegisterForms />
+        <EditVaccineForms />
       </div>
     </div>
   );
 }
 
-export default Register;
+export default EditVaccine;

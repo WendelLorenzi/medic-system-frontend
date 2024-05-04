@@ -93,7 +93,6 @@ class Modal extends React.Component {
 
     return (
       <div>
-        <button onClick={this.toggleModal}>Abrir Modal</button>
         <div style={overlayStyle}></div>
         <div style={modalStyle}>
           <div style={modalContentStyle}>
