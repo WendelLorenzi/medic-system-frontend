@@ -2,6 +2,7 @@ import { db } from "./firebase";
 import {
     collection,
     getDocs,
+    getDoc,
     addDoc,
     updateDoc,
     deleteDoc,
@@ -56,12 +57,20 @@ export const getAllVaccines = async () => {
 };
 
 export const getVaccineById = async (vaccineId) => {
-    const vaccineDocSnapshot = await getAllVaccines();
-    let docEncontrado = null;
-    const vaccine = vaccineDocSnapshot.map(doc => {
-        if(doc.id === vaccineId) {
-            docEncontrado = doc;
-        }
-    });
-    return docEncontrado;
-};
+    try {
+      const vaccineDocRef = doc(db, "vaccines", vaccineId);
+      const vaccineDocSnapshot = await getDoc(vaccineDocRef);
+  
+      if (vaccineDocSnapshot.exists()) {
+        return {
+          id: vaccineDocSnapshot.id,
+          ...vaccineDocSnapshot.data()
+        };
+      } else {
+        return null; // Retorna null se a vacina com o ID fornecido não existir
+      }
+    } catch (error) {
+      console.error("Erro ao buscar vacina pelo ID:", error);
+      throw error;
+    }
+  };

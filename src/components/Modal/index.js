@@ -8,8 +8,8 @@ const Modal = ({ isOpen: initialIsOpen, cardId }) => {
     setIsOpen(prevIsOpen => !prevIsOpen);
   };
 
-  const handleDelete = () => {
-    deleteVaccine(cardId);
+  const handleDelete = async (id) => {
+    await deleteVaccine(id);
     window.location.href = '/vaccines';
   };
 
@@ -94,7 +94,9 @@ const Modal = ({ isOpen: initialIsOpen, cardId }) => {
         <div style={modalContentStyle}>
           <div style={textStyle}>Tem certeza que deseja remover essa vacina?</div>
           <div style={buttonContainerStyle}>
-            <button style={button1Style} onClick={handleDelete}>SIM</button>
+            <button style={button1Style} onClick={() => {
+              handleDelete(cardId);
+            }}>SIM</button>
             <button style={button2Style} onClick={toggleModal}>CANCELAR</button>
           </div>
         </div>

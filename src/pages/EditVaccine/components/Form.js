@@ -10,7 +10,7 @@ const EditVaccineForms = () => {
     dose: '',
     vaccine: '',
     proxima: '',
-    selectedImage: null,
+    comprovante: null,
     openModal: false // Adicionado ao estado inicial
   });
 
@@ -35,7 +35,7 @@ const EditVaccineForms = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     await updateVaccine(id, {
-      comprovante: formData.selectedImage,
+      comprovante: formData.comprovante,
       data: formData.data,
       dose: formData.dose,
       vaccine: formData.vaccine,
@@ -53,7 +53,7 @@ const EditVaccineForms = () => {
     const reader = new FileReader();
 
     reader.onload = (event) => {
-      setFormData({ ...formData, selectedImage: event.target.result });
+      setFormData({ ...formData, comprovante: event.target.result });
     };
 
     reader.readAsDataURL(file);
@@ -232,9 +232,9 @@ const EditVaccineForms = () => {
               Selecionar imagem...
             </label>
           </div>
-          {formData.selectedImage && (
+          {formData.comprovante && (
             <div style={inputContainerStyle}>
-              <img src={formData.selectedImage} alt="Imagem selecionada" style={{ maxWidth: '100%', maxHeight: '200px', marginLeft: '23%' }} />
+              <img src={formData.comprovante} alt="Imagem selecionada" style={{ maxWidth: '100%', maxHeight: '200px', marginLeft: '23%' }} />
             </div>
           )}
           <div style={{
