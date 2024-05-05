@@ -1,19 +1,17 @@
 import React, { useState } from 'react';
 import Header from '../../components/Header';
 import Card from '../../components/Card';
-import { useHistory } from 'react-dom';
 
 function Vaccines() {
   // Estado para armazenar o texto de busca
   const [searchText, setSearchText] = useState('');
   const [selectedCardData, setSelectedCardData] = useState(null);
-  const history = useHistory();
 
   const handleCardClick = (data) => {
     // Armazena os dados do Card clicado no estado
     setSelectedCardData(data);
     // Redireciona para a rota '/edit-vaccine'
-    history.push('/edit-vaccine');
+    //history.push('/edit-vaccine');
   };
 
   // Lista de dados dos cards (substitua pelos seus próprios dados)
@@ -73,7 +71,7 @@ function Vaccines() {
                 date={card.date} 
                 img={card.img} 
                 nextDose={card.nextDose}
-                onClick={this.handleCardClick(card)}
+                //onClick={handleCardClick(card)}
                 style={{...cardStyle,...responsiveStyle }} 
               />
             ))}
