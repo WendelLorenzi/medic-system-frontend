@@ -46,6 +46,21 @@ function Vaccines() {
     maxWidth: '350px', // Largura máxima para evitar que os cards fiquem muito grandes
   };
 
+  const buttonStyle = {
+    width: '200px',
+    height: '50px',
+    backgroundColor: '#37BD6D',
+    color: 'white',
+    fontSize: '18px',
+    fontWeight: 'bold',
+    border: '1px',
+    borderRadius: '5px',
+    cursor: 'pointer',
+    marginTop: '80px',
+    marginLeft: '45%',
+    fontFamily: 'Averia Libre'
+  };
+
   return (
     <div className="vaccines" style={{ background: "#ADD4D0" }}>
       <Header showButton={true} loggued={true}/>
@@ -71,6 +86,11 @@ function Vaccines() {
               />
             ))}
         </div>
+        <button style={buttonStyle} onClick={
+          () => {
+            window.location.href = '/register-vaccine';
+          }
+        }> Nova vacina </button>
       </div>
     </div>
   );

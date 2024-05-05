@@ -57,9 +57,11 @@ export const getAllVaccines = async () => {
 
 export const getVaccineById = async (vaccineId) => {
     const vaccineDocSnapshot = await getAllVaccines();
+    let docEncontrado = null;
     const vaccine = vaccineDocSnapshot.map(doc => {
         if(doc.id === vaccineId) {
-            return doc;
+            docEncontrado = doc;
         }
     });
+    return docEncontrado;
 };
