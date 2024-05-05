@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../../../contexts/auth';
 import { doCreateUserWithEmailAndPassword } from '../../../firebase/auth';
 import { Navigate } from 'react-router-dom'
+import { createUser } from '../../../firebase/firestore';
 
 function RegisterForms() {
   const [formData, setFormData] = useState({
@@ -27,6 +28,7 @@ function RegisterForms() {
     e.preventDefault();
     if (!isRegistering) {
       setIsRegistering(true);
+      await createUser(formData);
       await doCreateUserWithEmailAndPassword(formData.email, formData.senha);
     }
     // console.log('Valores do formulário:', formData);

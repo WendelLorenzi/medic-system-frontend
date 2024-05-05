@@ -111,9 +111,10 @@ function LoginForms() {
 
         <div>
           <button style={buttonStyle} onClick={handleSubmit}>
-            Entrar
-            {isSigningIn && (
+            {isSigningIn ? (
               "Entrando.."
+            ): (
+              "Entrar"
             )}
           </button>
         </div>

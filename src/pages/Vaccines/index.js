@@ -1,58 +1,55 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '../../components/Header';
 import Card from '../../components/Card';
+import { getAllVaccines } from '../../firebase/firestore';
 
 function Vaccines() {
-  // Estado para armazenar o texto de busca
   const [searchText, setSearchText] = useState('');
-  const [selectedCardData, setSelectedCardData] = useState(null);
+  const [cardData, setCardData] = useState([]);
 
-  const handleCardClick = (data) => {
-    // Armazena os dados do Card clicado no estado
-    setSelectedCardData(data);
-    // Redireciona para a rota '/edit-vaccine'
-    //history.push('/edit-vaccine');
+  const handleCardClick = (id) => {
+    window.location.href = `/edit-vaccine/${id}`;
   };
 
-  // Lista de dados dos cards (substitua pelos seus próprios dados)
-  const cardData = [
-    { vaccineName: 'teste1', qtdDose: '1 dose', date: '17/03/1998', img: '/', nextDose: '17/03/2024' },
-    { vaccineName: 'teste2', qtdDose: '1 dose', date: '17/03/1998', img: '/', nextDose: '17/03/2024' },
-    { vaccineName: 'teste3', qtdDose: '1 dose', date: '17/03/1998', img: '/', nextDose: '17/03/2024' },
-    { vaccineName: 'teste4', qtdDose: '1 dose', date: '17/03/1998', img: '/', nextDose: '17/03/2024' }
-    // Adicione mais dados de cards conforme necessário
-  ];
+  const getAll = async () => {
+    const vaccines = await getAllVaccines();
+    setCardData(vaccines);
+  };
 
-  // Função para lidar com a alteração no input de busca
+  useEffect(() => {
+    getAll();
+  }, []);
+
   const handleSearchChange = (e) => {
     setSearchText(e.target.value);
   };
 
-  // Função para filtrar os cards com base no texto de busca
   const filteredCards = cardData.filter(card =>
-    card.vaccineName.toLowerCase().includes(searchText.toLowerCase())
+    card.vaccine.toLowerCase().includes(searchText.toLowerCase())
   );
 
   const containerStyle = {
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
-    gap: '20px', // Adiciona uma margem entre os cards
+    gap: '20px',
   };
   
   const cardStyle = {
-    width: '30%',
+    width: '30%', // Mudança de 30% para que haja no máximo 3 cards na horizontal
     marginBottom: '20px',
-    boxSizing: 'border-box', // Garante que a largura inclua padding e border
+    boxSizing: 'border-box',
   };
 
-  const responsiveStyle = window.innerWidth <= 768? { width: '45%' } : { width: '30%' };
+  const responsiveStyle = {
+    width: '100%', // Ajuste para ocupar toda a largura em telas menores
+    maxWidth: '350px', // Largura máxima para evitar que os cards fiquem muito grandes
+  };
 
   return (
     <div className="vaccines" style={{ background: "#ADD4D0" }}>
       <Header showButton={true} loggued={true}/>
       <div style={{ overflowY: 'auto', height: '120vh', padding: "20px" }}>
-        {/* Input de busca */}
         <input
           type="text"
           value={searchText}
@@ -60,18 +57,16 @@ function Vaccines() {
           placeholder="PESQUISAR VACINA..."
           style={{ marginBottom: '20px', width: '98%', padding: '10px', fontSize: '16px', fontFamily: 'Averia Libre' }}
         />
-
-        {/* Renderização dos cards */}
         <div style={containerStyle}>
             {filteredCards.map(card => (
                 <Card 
-                key={card.vaccineName} 
-                vaccineName={card.vaccineName} 
-                qtdDose={card.qtdDose} 
-                date={card.date} 
-                img={card.img} 
-                nextDose={card.nextDose}
-                //onClick={handleCardClick(card)}
+                key={card.id} 
+                vaccineName={card.vaccine} 
+                qtdDose={card.dose} 
+                date={card.data} 
+                img={card.comprovante} 
+                nextDose={card.proxima}
+                onClick={() => handleCardClick(card.id)}
                 style={{...cardStyle,...responsiveStyle }} 
               />
             ))}

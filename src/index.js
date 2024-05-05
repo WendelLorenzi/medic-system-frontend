@@ -17,7 +17,7 @@ ReactDOM.render(
       <Routes>
         <Route exact path="/" element={<App />} />
         <Route path="/recover" element={<RecoverPass />} />
-        <Route path="/edit-vaccine" element={<EditVaccine />} />
+        <Route path="/edit-vaccine/:id" element={<EditVaccine />} />
         <Route path="/register-vaccine" element={<RegisterVaccine />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />

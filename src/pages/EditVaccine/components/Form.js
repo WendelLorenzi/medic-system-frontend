@@ -1,45 +1,64 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Modal from '../../../components/Modal';
+import { useParams } from 'react-router-dom';
+import { getVaccineById, updateVaccine } from '../../../firebase/firestore';
 
-class EditVaccineForms extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      data: '',
-      dose: '',
-      vaccine: '',
-      proxima: '',
-      selectedImage: null
-    };
-  }
+const EditVaccineForms = () => {
+  const { id } = useParams();
+  const [formData, setFormData] = useState({
+    data: '',
+    dose: '',
+    vaccine: '',
+    proxima: '',
+    selectedImage: null,
+    openModal: false // Adicionado ao estado inicial
+  });
 
-  handleChange = (e) => {
-    this.setState({
+  const getVaccine = async (cardId) => {
+    const vaccine = await getVaccineById(cardId);
+    console.log('vaccine', vaccine)
+    setFormData({...vaccine, openModal: false});
+  };
+
+  useEffect(() => {
+    getVaccine(id);
+  }, []);
+
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
       [e.target.name]: e.target.value
     });
   };
 
-  handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Valores do formulário:', this.state);
+    await updateVaccine(id, {
+      comprovante: formData.selectedImage,
+      data: formData.data,
+      dose: formData.dose,
+      vaccine: formData.vaccine,
+      proxima: formData.proxima
+    });
+    console.log('Valores do formulário:', formData);
   };
 
-  handleModal = () => {
-    this.setState({ openModal: true });
+  const handleModal = () => {
+    setFormData({ ...formData, openModal: true });
   };
 
-  handleFileSelect = (e) => {
+  const handleFileSelect = (e) => {
     const file = e.target.files[0];
     const reader = new FileReader();
 
     reader.onload = (event) => {
-      this.setState({ selectedImage: event.target.result }); // Armazena a URL da imagem no estado
+      setFormData({ ...formData, selectedImage: event.target.result });
     };
 
     reader.readAsDataURL(file);
   };
 
-  render() {
     const formularioStyle = {
       width: '1250px',
       position: 'absolute',
@@ -134,21 +153,20 @@ class EditVaccineForms extends React.Component {
         fontFamily: 'Averia Libre'
       };
 
-      const { openModal } = this.state;
-      
+      const { openModal } = formData;
     return (
       <>
-      <button style={topRightButtonStyle} onClick={this.handleModal}>
+      <button style={topRightButtonStyle} onClick={handleModal}>
       <img src="../../../public/assets/trashIcon.png" alt={""} />
         Excuir
       </button>
       <div style={formularioStyle}>
-        <form onSubmit={this.handleSubmit} style={{
+        <form onSubmit={handleSubmit} style={{
           display: 'flex',
           flexDirection: 'column'
         }}>
             {openModal && (
-                 <Modal isOpen={true}/>
+                 <Modal isOpen={true} cardId={id}/>
             )}
         <div style={{
           marginLeft: '4.5%',
@@ -157,7 +175,7 @@ class EditVaccineForms extends React.Component {
           alignItems: 'center'
         }}>
             <label htmlFor="data" style={labelStyle}>Data da Vacinação:</label>
-            <input type="date" id="data" name="data" style={inputStyle} value={this.state.data} onChange={this.handleChange} />
+            <input type="date" id="data" name="data" style={inputStyle} value={formData.data} onChange={handleChange} />
           </div>
           <div style={{
           marginLeft: '15%',
@@ -177,7 +195,7 @@ class EditVaccineForms extends React.Component {
                     fontFamily: 'Averia Libre',
                     fontWeight: 400,
                     marginLeft: '12px'
-            }} value={this.state.vaccine} onChange={this.handleChange} />
+            }} value={formData.vaccine} onChange={handleChange} />
           </div>
           <div style={{
           marginLeft: '16.5%',
@@ -187,36 +205,36 @@ class EditVaccineForms extends React.Component {
         }}>
             <label htmlFor="dose" style={labelStyle}>Dose:</label>
             <div>
-              <input type="radio" id="1dose" name="dose" value="1a" checked={this.state.dose === '1a'} onChange={this.handleChange} />
+              <input type="radio" id="1dose" name="dose" value="1a" checked={formData.dose === '1a'} onChange={handleChange} />
               <label htmlFor="1aDose" style={RadioptsConfig}>1a. dose</label>
             </div>
             <div>
-              <input type="radio" id="2dose" name="dose" value="2a" checked={this.state.dose === '2a'} onChange={this.handleChange} />
+              <input type="radio" id="2dose" name="dose" value="2a" checked={formData.dose === '2a'} onChange={handleChange} />
               <label htmlFor="2aDose" style={RadioptsConfig}>2a. dose</label>
             </div>
             <div>
-              <input type="radio" id="3dose" name="dose" value="3a" checked={this.state.dose === '3a'} onChange={this.handleChange} />
+              <input type="radio" id="3dose" name="dose" value="3a" checked={formData.dose === '3a'} onChange={handleChange} />
               <label htmlFor="3aDose" style={RadioptsConfig}>3a. dose</label>
             </div>
             <div>
-              <input type="radio" id="reforco" name="dose" value="reforco" checked={this.state.dose === 'reforco'} onChange={this.handleChange} />
+              <input type="radio" id="reforco" name="dose" value="reforco" checked={formData.dose === 'reforco'} onChange={handleChange} />
               <label htmlFor="reforco" style={RadioptsConfig}>Reforço</label>
             </div>
             <div>
-              <input type="radio" id="unica" name="dose" value="unica" checked={this.state.dose === 'unica'} onChange={this.handleChange} />
+              <input type="radio" id="unica" name="dose" value="unica" checked={formData.dose === 'unica'} onChange={handleChange} />
               <label htmlFor="unica" style={RadioptsConfig}>Dose única</label>
             </div>
           </div>
           <div style={inputContainerStyle}>
           <label htmlFor="data" style={labelStyle}>Comprovante da vacina:</label>
-            <input type="file" id="comprovante" name="comprovante" style={{ display: 'none' }} onChange={this.handleFileSelect} />
+            <input type="file" id="comprovante" name="comprovante" style={{ display: 'none' }} onChange={handleFileSelect} />
             <label htmlFor="comprovante" style={buttonImgStyle}>
               Selecionar imagem...
             </label>
           </div>
-          {this.state.selectedImage && (
+          {formData.selectedImage && (
             <div style={inputContainerStyle}>
-              <img src={this.state.selectedImage} alt="Imagem selecionada" style={{ maxWidth: '100%', maxHeight: '200px', marginLeft: '23%' }} />
+              <img src={formData.selectedImage} alt="Imagem selecionada" style={{ maxWidth: '100%', maxHeight: '200px', marginLeft: '23%' }} />
             </div>
           )}
           <div style={{
@@ -226,16 +244,15 @@ class EditVaccineForms extends React.Component {
           alignItems: 'center'
         }}>
             <label htmlFor="data" style={labelStyle}>Próxima Vacinação:</label>
-            <input type="date" id="proxima" name="proxima" style={inputStyle} value={this.state.proxima} onChange={this.handleChange} />
+            <input type="date" id="proxima" name="proxima" style={inputStyle} value={formData.proxima} onChange={handleChange} />
           </div>
           <div>
-            <button style={buttonStyle} onClick={this.handleSubmit}>Salvar Alterações</button>
+            <button style={buttonStyle} onClick={handleSubmit}>Salvar Alterações</button>
           </div>
         </form>
       </div>
       </>
     );
-  }
 }
 
 export default EditVaccineForms;
